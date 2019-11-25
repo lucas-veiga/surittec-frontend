@@ -1,7 +1,8 @@
 <nav *ngIf="isAuthenticated()"
      class="navbar navbar-expand-md fixed-top bg-white">
   <a class="navbar-brand"
-     href="#">Clientes</a>
+     href="#"
+     [routerLink]="['/']">Clientes</a>
   <button class="navbar-toggler collapsed"
           type="button"
           data-toggle="collapse"
@@ -24,6 +25,7 @@
   </div>
 </nav>
 
-<div class="container" [style.margin-top.rem]="'4.5'">
+<div class="container-fluid"
+     [style.margin-top.rem]="'4.5'">
   <router-outlet></router-outlet>
 </div>

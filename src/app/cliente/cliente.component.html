@@ -1,5 +1,18 @@
+<div *ngIf="loading; else list"
+     class="card card-body">
+  <div class="d-flex align-items-center justify-content-center">
+    <fa-icon [icon]="faSpinner"
+             [spin]="true"></fa-icon>
+  </div>
+</div>
+<ng-template #list>
   <div class="row">
     <div class="col-12 col-md-6">
+      <button type="button"
+              *appIsAdmin
+              [routerLink]="['new']"
+              class="btn btn-block btn-success mb-3">Cadastrar cliente
+      </button>
       <div class="list-group mb-3">
         <button *ngFor="let cliente of clientes"
                 [routerLink]="[cliente.id]"
@@ -13,4 +26,4 @@
       <router-outlet></router-outlet>
     </div>
   </div>
-
+</ng-template>

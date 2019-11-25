@@ -4,18 +4,21 @@ import { ClienteComponent } from "./cliente.component";
 import { ClienteDetailComponent } from './cliente-detail/cliente-detail.component';
 import { RouterModule } from "@angular/router";
 import { ClienteFormComponent } from './cliente-form/cliente-form.component';
-import {NgxMaskModule} from 'ngx-mask';
-import { FormsModule } from "@angular/forms";
-
+import { NgxMaskModule } from 'ngx-mask';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { IsAdminDirective } from './is-admin.directive';
 
 
 @NgModule({
-  declarations: [ClienteComponent, ClienteDetailComponent, ClienteFormComponent],
+  declarations: [ClienteComponent, ClienteDetailComponent, ClienteFormComponent, IsAdminDirective],
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     NgxMaskModule.forChild(),
-    FormsModule
+    FontAwesomeModule
   ]
 })
 export class ClienteModule { }

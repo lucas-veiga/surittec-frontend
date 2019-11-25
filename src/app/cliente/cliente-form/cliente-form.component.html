@@ -1,1 +1,257 @@
-<p>cliente-form works!</p>
+<div class="card">
+  <form [formGroup]="form"
+        (ngSubmit)="onSubmit()">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>{{edit ? form.get('nome').value : 'Cadastrar cliente'}}</span>
+      <button type="submit"
+              class="btn btn-primary">
+        Salvar
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="form-group col-12">
+          <label for="nome">Nome</label>
+          <input formControlName="nome"
+                 class="form-control"
+                 type="text"
+                 id="nome">
+          <div [hidden]="!(form.get('nome')?.touched && form.get('nome')?.invalid)">
+            <small [hidden]="!form.get('nome')?.errors?.required"
+                   class="form-text text-danger">
+              O Nome é obrigatório.
+            </small>
+            <small [hidden]="!form.get('nome')?.errors?.minlength"
+                   class="form-text text-danger">
+              O Nome deve conter no mínimo 3 caracteres.
+            </small>
+            <small [hidden]="!form.get('nome')?.errors?.maxlength"
+                   class="form-text text-danger">
+              O Nome deve conter no máximo 100 caracteres.
+            </small>
+            <!--          <small [hidden]="!form.get('nome')?.errors?.pattern"-->
+            <!--                 class="form-text text-danger">-->
+            <!--            Nome deve conter apenas letras, números e espaços.-->
+            <!--          </small>-->
+          </div>
+        </div>
+        <div class="form-group col-12">
+          <label for="cpf">CPF</label>
+          <input mask="000.000.000-00"
+                 formControlName="cpf"
+                 class="form-control"
+                 type="text"
+                 id="cpf">
+          <div [hidden]="!(form.get('cpf')?.touched && form.get('cpf')?.invalid)">
+            <small [hidden]="!form.get('cpf')?.errors?.required"
+                   class="form-text text-danger">
+              O CPF é obrigatório.
+            </small>
+            <small [hidden]="!form.get('cpf')?.errors?.minlength"
+                   class="form-text text-danger">
+              O CPF deve conter exatamente 11 caracteres.
+            </small>
+          </div>
+        </div>
+        <div formGroupName="endereco"
+             class="d-flex flex-wrap"
+             [style.border]="'none'">
+          <div class="form-group col-md-6">
+            <label for="cep">CEP</label>
+            <div class="input-group">
+              <input mask="00000-000"
+                     [dropSpecialCharacters]="true"
+                     formControlName="cep"
+                     class="form-control"
+                     type="text"
+                     id="cep">
+              <div class="input-group-append">
+                <button class="btn btn-outline-primary"
+                        [disabled]="form.get('endereco.cep')?.invalid || isSearchingCep"
+                        (click)="consultaCep()"
+                        type="button">
+                  <fa-icon [icon]="isSearchingCep ? faSpinner : faSearch"
+                           [spin]="isSearchingCep"></fa-icon>
+                </button>
+              </div>
+            </div>
+            <div [hidden]="!(form.get('endereco.cep')?.touched && form.get('endereco.cep')?.invalid)">
+              <small [hidden]="!form.get('endereco.cep')?.errors?.required"
+                     class="form-text text-danger">
+                O CEP é obrigatório.
+              </small>
+              <small [hidden]="!form.get('endereco.cep')?.errors?.minlength"
+                     class="form-text text-danger">
+                O CEP deve ter exatamente 8 caracteres.
+              </small>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="bairro">Bairro</label>
+            <input formControlName="bairro"
+                   class="form-control"
+                   type="text"
+                   id="bairro">
+            <div [hidden]="!(form.get('endereco.bairro')?.touched && form.get('endereco.bairro')?.invalid)">
+              <small [hidden]="!form.get('endereco.bairro')?.errors?.required"
+                     class="form-text text-danger">
+                O Bairro é obrigatório.
+              </small>
+            </div>
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="logradouro">Logradouro</label>
+            <input formControlName="logradouro"
+                   class="form-control"
+                   type="text"
+                   id="logradouro">
+            <div [hidden]="!(form.get('endereco.logradouro')?.touched && form.get('endereco.logradouro')?.invalid)">
+              <small [hidden]="!form.get('endereco.logradouro')?.errors?.required"
+                     class="form-text text-danger">
+                O Logradouro é obrigatório.
+              </small>
+            </div>
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="complemento">Complemento</label>
+            <small class="text-muted font-weight-lighter"> Opcional</small>
+            <input formControlName="complemento"
+                   class="form-control"
+                   type="text"
+                   id="complemento">
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="uf">UF</label>
+            <select formControlName="uf"
+                    class="form-control"
+                    id="uf">
+              <option *ngFor="let estado of estados | async"
+                      [value]="estado.sigla">{{estado.nome}}</option>
+            </select>
+            <div [hidden]="!(form.get('endereco.uf')?.touched && form.get('endereco.uf')?.invalid)">
+              <small [hidden]="!form.get('endereco.uf')?.errors?.required"
+                     class="form-text text-danger">
+                A UF é obrigatória.
+              </small>
+            </div>
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <label for="cidade">Cidade</label>
+            <input formControlName="cidade"
+                   class="form-control"
+                   type="text"
+                   id="cidade">
+            <div [hidden]="!(form.get('endereco.cidade')?.touched && form.get('endereco.cidade')?.invalid)">
+              <small [hidden]="!form.get('endereco.cidade')?.errors?.required"
+                     class="form-text text-danger">
+                A Cidade é obrigatória.
+              </small>
+            </div>
+          </div>
+        </div>
+        <hr class="col-8 mb-4">
+        <div class="form-group col-12">
+          <label for="emails">Emails</label>
+          <button (click)="addEmail()"
+                  class="btn btn-sm btn-outline-primary float-right"
+                  type="button">
+            <fa-icon [icon]="faPlus"></fa-icon>
+          </button>
+          <div formArrayName="emails"
+               [style.border]="'none'">
+            <ng-container *ngFor="let email of emails.controls; let i = index">
+              <div id="emails"
+                   class="input-group mt-2"
+                   [formGroupName]="i"
+                   [style.border]="'none'">
+                <input type="email"
+                       class="form-control"
+                       formControlName="email">
+                <div *ngIf="!(emails.length === 1)"
+                     class="input-group-append">
+                  <button class="btn btn-outline-danger"
+                          (click)="removeEmail(i)"
+                          type="button">
+                    <fa-icon [icon]="faMinus"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div [hidden]="!(email.get('email')?.touched && email.get('email')?.invalid)">
+                <small [hidden]="!email.get('email')?.errors?.required"
+                       class="form-text text-danger">
+                  O Email é obrigatório.
+                </small>
+                <small [hidden]="!email.get('email')?.errors?.email"
+                       class="form-text text-danger">
+                  Email inválido.
+                </small>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <hr class="col-8 mb-4">
+        <div class="form-group col-12">
+          <label for="emails">Telefones</label>
+          <button (click)="addTelefone()"
+                  class="btn btn-sm btn-outline-primary float-right"
+                  type="button">
+            <fa-icon [icon]="faPlus"></fa-icon>
+          </button>
+          <div formArrayName="telefones"
+               [style.border]="'none'">
+            <ng-container *ngFor="let telefone of telefones.controls; let i = index">
+              <div class="row"
+                   [style.border]="'none'"
+                   [formGroupName]="i">
+                <div class="form-group col-12 col-md-4">
+                  <label for="tipo{{i}}">Tipo</label>
+                  <select formControlName="tipo"
+                          class="form-control"
+                          id="tipo{{i}}">
+                    <option *ngFor="let tipo of tiposTelefone"
+                            [value]="tipo">{{tipo | titlecase}}</option>
+                  </select>
+                </div>
+                <div class="form-group col-8 col-md-6">
+                  <label for="telefone{{i}}">Número</label>
+                  <input type="text"
+                         class="form-control"
+                         id="telefone{{i}}"
+                         [mask]="telefone.get('tipo').value === 'CELULAR' ? '(00)00000-0000' : '(00)0000-0000'"
+                         [dropSpecialCharacters]="true"
+                         formControlName="numero">
+                  <div [hidden]="!(telefone.get('numero')?.touched && telefone.get('numero')?.invalid)">
+                    <small [hidden]="!telefone.get('numero')?.errors?.required"
+                           class="form-text text-danger">
+                      O número é obrigatório
+                    </small>
+                    <small [hidden]="!telefone.get('numero')?.errors"
+                           class="form-text text-danger">
+                      O número é inválido.
+                    </small>
+                  </div>
+                </div>
+                <div class="col-4 col-md-2">
+                  <label for="removeTelefone{{i}}"
+                         [style.opacity]="'0'">Remover</label>
+                  <button *ngIf="!(telefones.length === 1)"
+                          (click)="removeTelefone(i)"
+                          class="btn btn-outline-danger"
+                          id="removeTelefone{{i}}"
+                          type="button">
+                    <fa-icon [icon]="faMinus"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div>Detalhes do form</div>
+      <pre>Form válido: {{ form.valid }}</pre>
+      <pre>Valores: <br>{{ form.value | json }}</pre>
+    </div>
+  </form>
+</div>

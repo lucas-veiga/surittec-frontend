@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 
 export class TokenInterceptor implements HttpInterceptor {
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.includes('/login') || !localStorage.getItem('token')) {
+    if (req.url.includes('/login') || !localStorage.getItem('token') || !req.url.includes('localhost')) {
       return next.handle(req);
     }
 
