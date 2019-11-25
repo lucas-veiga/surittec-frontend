@@ -5,6 +5,7 @@ import { AuthenticationGuard } from "./guards/authentication.guard";
 import { AuthComponent } from "./auth/auth.component";
 import { ClienteDetailComponent } from "./cliente/cliente-detail/cliente-detail.component";
 import { ClienteFormComponent } from "./cliente/cliente-form/cliente-form.component";
+import { CanLogGuard } from "./guards/can-log.guard";
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
       {path: ':id/edit', component: ClienteFormComponent, canActivate: [AuthenticationGuard]}
     ]
   },
-  {path: 'login', component: AuthComponent},
+  {path: 'login', component: AuthComponent, canActivate: [CanLogGuard]},
   {path: '', redirectTo: '/cliente', pathMatch: 'full'},
 ];
 
