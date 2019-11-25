@@ -3,6 +3,8 @@
     <div class="col-md-4">
       <div class="card card-body">
         <h3 class="text-center mb-4">Login</h3>
+        <div class="alert alert-danger"
+             *ngIf="errorMessage">{{errorMessage}}</div>
         <form #f="ngForm"
               (ngSubmit)="onSubmit()">
           <div class="form-group">
@@ -44,12 +46,6 @@
             </button>
           </div>
         </form>
-      </div>
-      <div class="row">
-        <pre>{{f.value | json}}</pre>
-      </div>
-      <div class="row">
-        <pre>{{f.valid | json}}</pre>
       </div>
     </div>
   </div>

@@ -3,23 +3,36 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthComponent } from './auth/auth.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { AuthService } from "./auth/auth.service";
+import { ClienteModule } from "./cliente/cliente.module";
+import { AuthModule } from "./auth/auth.module";
+import { TokenInterceptor } from "./interceptors/auth.interceptor";
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   declarations: [
     AppComponent,
-    AuthComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ClienteModule,
+    AuthModule,
+    NgxMaskModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
