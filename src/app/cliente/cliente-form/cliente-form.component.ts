@@ -106,9 +106,9 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
 
   private save(): void {
     this.clienteService.saveCliente(this.form.value).subscribe(
-      (_) => {
+      (res: any) => {
         this.clienteService.listUpdated.next();
-        this.router.navigate(['../'], {relativeTo: this.route})
+        this.router.navigate(['/cliente', res.id])
       },
       (err) => console.error(err)
     );
@@ -116,7 +116,7 @@ export class ClienteFormComponent implements OnInit, OnDestroy {
 
   private update(): void {
     this.clienteService.updateCliente(this.form.value).subscribe(
-      (_) => this.router.navigate(['../'], {relativeTo: this.route}),
+      (res: any) => this.router.navigate(['/cliente', res.id], {relativeTo: this.route}),
       (err) => console.error(err)
     );
   }
